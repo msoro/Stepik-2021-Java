@@ -51,37 +51,13 @@ TooLongTextAnalyzer и метод checkLabels. TextAnalyzer и Label уже по
 импорты вам не потребуются.
 */
 
-class Main // Наш главный класс, все остальные будут его подклассами
-{
-    public Label checkLabels (...) {...} // наш главный метод
-    abstract class KeywordAnalyzer {...}
-    enum Label { SPAM, NEGATIVE_TEXT, TOO_LONG, OK }
-    class NegativeTextAnalyzer {...}
-    class SpamAnalyzer {...}
-    class TooLongTextAnalyzer {...}
-    interface TextAnaluzer {...}
-    public static void main(String[] args) {
-    // здесь тестируем. Можно взять хороший тест от Кирилла Колесников в комментариях ниже
 
-        public static void main(String[] args) {
-            NegativeTextAnalyzer a = new NegativeTextAnalyzer();
-            SpamAnalyzer s = new SpamAnalyzer(new String[]{"купить", "продать"});
-            TooLongTextAnalyzer l = new TooLongTextAnalyzer(15);
+// Абстрактный класс анализатора ключевиков
+abstract class KeywordAnalyzer implements TextAnalyzer {
+    abstract protected String[] getKeywords(); //возвращает набор ключевых слов
+    abstract protected Label getLabel(); //возвращает метку, которой необходимо пометить положительные срабатывания
 
-            TextAnalyzer[] T = {a, s, l};
-            System.out.println(checkLabels(T, "Эта строка не пройдёт проверку на длину в 3-м по счету анализаторе"));
-            System.out.println(checkLabels(T, "Реклама. Предлагаем купить квартиру! (2-й анализатор ругнётся)"));
-            System.out.println(checkLabels(T, "Не грусти :(, мышкой похрусти! (1-й)"));
-            System.out.println(checkLabels(T, "Здесь всё ОК"));
-        }
-}
-
-
-
-abstract class KeywordAnalyzer implements TextAnalyzer{
-    abstract protected String[] getKeywords();
-    abstract protected Label getLabel();
-
+    // Реализуем processText таким образом, чтобы он зависел только от getKeywords и getLabel.
     public Label processText(String text) {
         String[] keywords = getKeywords();
         for (int i = 0; i < keywords.length; i++) {
