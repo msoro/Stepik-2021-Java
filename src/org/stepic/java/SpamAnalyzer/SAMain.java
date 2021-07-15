@@ -93,3 +93,5 @@ class TooLongTextAnalyzer implements TextAnalyzer {
         return text.length() > maxLength ? Label.TOO_LONG : Label.OK;
     }
 }
+
+
